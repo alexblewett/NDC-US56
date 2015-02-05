@@ -3,44 +3,45 @@ from flask import Flask, jsonify, abort, make_response, request
 
 app = Flask(__name__)
 
-tasks = [
+items = [
     {
         'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
-        'done': False
+        'title': u'DN12345',
+        'address': u'12 main road', 
+        'type': u'dealing'
     },
     {
         'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web', 
-        'done': False
+        'title': u'DN56789',
+        'address': u'34 high street', 
+        'type': u'TP'
     }
 ]
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify({'tasks': tasks})
+@app.route('/BGREST/api/data', methods=['GET'])
+def get_all_items():
+    return jsonify({'items': items})
 
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
-def get_task(task_id):
-    task = [task for task in tasks if task['id'] == task_id]
-    if len(task) == 0:
+@app.route('/BGREST/api/data/<int:item_id>', methods=['GET'])
+def get_one_item(item_id):
+    item = [item for item in items if item['id'] == item_id]
+    if len(item) == 0:
         abort(404)
-    return jsonify({'task': task[0]})
+    return jsonify({'item': item[0]})
 
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
-def create_task():
+@app.route('/BGREST/api/data', methods=['POST'])
+def create_item():
     if not request.json or not 'title' in request.json:
         abort(400)
-    task = {
-        'id': tasks[-1]['id'] + 1,
+    item = {
+        'id': items[-1]['id'] + 1,
         'title': request.json['title'],
-        'description': request.json.get('description', ""),
-        'done': False
+        'address': request.json.get('address', ""),
+        'type': request.json.get('type', "")
     }
-    tasks.append(task)
-    return jsonify({'task': task}), 201
+    #file_body[items[-1]['id'] + 1] = request.args['file'][0]
+    items.append(item)
+    return jsonify({'New item created, id': items[-1]['id']}), 201
 
 @app.errorhandler(404)
 def not_found(error):
