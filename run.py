@@ -45,14 +45,14 @@ def get_one_item(item_id):
     if (highestItem > 0) and (item_id <= highestItem) :
         query = Item.query.filter(Item.item_Id == item_id).first()
 
-        return jsonify({'id': query.item_Id, 'title': query.title, 'address': query.address, 'type': query.application_Type}), 200
+        return jsonify({'id': query.item_Id, 'title': query.title, 'address': query.address, 'type': query.application_Type}), 201
     else:
         abort(404)
 
 @app.route('/BGREST/api/data', methods=['POST'])
 def create_item():
     if not request.json or not 'title' in request.json:
-        abort(400)
+        abort(401)
     item = Item()
     query = Item.query.order_by(desc(Item.item_Id)).first()
 
@@ -60,7 +60,7 @@ def create_item():
     item.item_Id = highestItem+1
     item.title = request.json['title']
     if item.title == '':
-        abort(400)
+        abort(401)
     item.address = request.json.get('address', "")
     item.application_Type = request.json.get('type', "")
         
@@ -73,7 +73,7 @@ def create_item():
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-@app.errorhandler(400)
+@app.errorhandler(401)
 def not_found(error):
     return make_response(jsonify({'error': 'No Title'}), 404)
 
