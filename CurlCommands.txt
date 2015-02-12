@@ -1,0 +1,10 @@
+Add data:
+curl -i -H "Content-Type: application/json" -X POST -d '{"title":"DN1111","address":"26 happy street"}' http://192.168.50.4:5000/BGREST/api/data
+
+Query specific data id:
+curl -i http://192.168.50.4:5000/BGREST/api/data/5
+
+Query all data:
+curl -i http://192.168.50.4:5000/BGREST/api/data
+
+192.168.50.1
