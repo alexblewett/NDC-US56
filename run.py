@@ -45,7 +45,7 @@ def get_one_item(item_id):
     if (highestItem > 0) and (item_id <= highestItem) :
         query = Item.query.filter(Item.item_Id == item_id).first()
 
-        return jsonify({'id': query.item_Id, 'title': query.title, 'address': query.address, 'type': query.application_Type}), 202
+        return jsonify({'id': query.item_Id, 'title': query.title, 'address': query.address, 'type': query.application_Type}), 200
     else:
         abort(404)
 
@@ -67,7 +67,7 @@ def create_item():
     db.session.add(item)
     db.session.commit()
 
-    return jsonify({'id': item.item_Id}), 201
+    return jsonify({'id': item.item_Id}), 302
 
 @app.errorhandler(404)
 def not_found(error):
